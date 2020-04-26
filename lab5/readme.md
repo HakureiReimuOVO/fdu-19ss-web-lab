@@ -2,7 +2,7 @@
 > 19302010009 钱麒丹
 
 ## 网页运行截图
-![img](../lab5/img/img.png)
+![img](./img/img.png)
 
 ## URL
 运用了字符串的**indexOf**方法来获得字符的位置，并且利用**substring**方法来截取URL来获得其中的name字段。
