@@ -10,10 +10,22 @@
     ②使用console.log打印计数即可，到达一分钟提前停止也需要console.log相应的提示语句。
 */
 
-function testTime(){
+let countTime;
+const time = window.setInterval("countTime()", 5000);
 
+function testTime() {
+    let value = 1;
+    let count = 0;
+    let initial_minute = new Date().getMinutes();
+    console.log(value);
+    countTime = function () {
+        if (++count <= 10 && new Date().getMinutes() === initial_minute) value *= 2;
+        else window.clearInterval(time);
+        console.log(value);
+    }
 }
-// testTime();
+
+testTime();
 
 /*
 2.
@@ -23,8 +35,15 @@ function testTime(){
     ③邮箱字符串的正则匹配的理解需写入lab文档。
     ④telephone与mail均是字符串。
 */
-function testMail(telephone,mail) {
 
+function testMail(telephone, mail) {
+    const pattern_telephone = /^[^0][0-9]{10}$/;
+    const pattern_mail = /^[\w-_]+@[\w-_]+(\.[\w-_]+)+$/;
+    let ifTelephone = "right";
+    let ifMail = "right";
+    if (telephone.search(pattern_telephone) === -1) ifTelephone = "wrong";
+    if (mail.search(pattern_mail) === -1) ifMail = "wrong";
+    console.log("The telephone is " + ifTelephone + " and the mail is " + ifMail + "!");
 }
 
 /*
@@ -36,10 +55,25 @@ function testMail(telephone,mail) {
     ④对该函数中用的正则匹配的理解需写入lab文档。
     ⑤str为字符串。
 */
+
 function testRedundancy(str) {
+    function compareStr(str1, str2) {
+        if (str1[0] < str2[0]) return -1;
+        else if (str1[0] > str2[0]) return 1;
+        else return 0;
+    }
 
+    const pattern = /\b([A-Z]+)\s+\1\b/ig;
+    let set = new Set();
+    for (let i of str.match(pattern)) set.add(i);
+    if (set.size > 10) {
+        let array = new Array()
+        for (let i of set) array.push(i);
+        array.sort(compareStr);
+        set = new Set(array.slice(0, 10));
+    }
+    for (let i of set) console.log(i);
 }
-
 
 /*
 4.
@@ -55,8 +89,15 @@ function testRedundancy(str) {
 注意：
     ①注意联系生活，并注意观察我给的上述例子。
 */
-function testKeyBoard(wantInput, actualInput) {
 
+function testKeyBoard(wantInput, actualInput) {
+    let input = (actualInput + wantInput).toLocaleUpperCase();
+    let inputSet = new Set();
+    for (let i in input) {
+        if (i >= actualInput.length)
+            if (!inputSet.has(input[i])) console.log(input[i]);
+        inputSet.add(input[i]);
+    }
 }
 
 /*
@@ -71,7 +112,16 @@ function testKeyBoard(wantInput, actualInput) {
     ④只能显式使用一次循环。
     ⑤str为字符串。
 */
+
 function testSpecialReverse(str) {
+    const pattern = /([^\s]+(?=\s+))|((?<=\s+)[^\s]+)/g;
+    let reverseStr = "";
+    let array = str.match(pattern);
+    array = array.reverse();
+    for (let i in array)
+        if (i == array.length - 1) reverseStr += array[i];
+        else reverseStr += array[i] + " ";
+    console.log(reverseStr);
 }
 
 /*
@@ -90,8 +140,16 @@ function testSpecialReverse(str) {
 */
 
 function twoSum(nums, target) {
+    let map = new Map();
+    let res = new Array();
+    for (let i = 0; i < nums.length; i++) map.set(i, nums[i]);
+    map.forEach((value1, key1) => {
+        map.forEach((value2, key2) => {
+            if (value1 + value2 === target && key1 <= key2) res.push([key1, key2]);
+        })
+    });
+    for (let i of res) console.log("[" + i + "]");
 }
-
 
 /*
 7.
@@ -99,12 +157,25 @@ function twoSum(nums, target) {
     打印最长的包含不同字符串的子字符串长度。
 要求：
     ①使用Map。
-    ②例如：输入"abbbbb",输出1，输入"bbbbb",输出2；
+    ②例如：输入"abbbbb",输出2，输入"bbbbb",输出1；
     ③只能显式使用一次循环。
     ④使用console.log打印即可。
     ⑤str为字符串。
 */
 function lengthOfLongestSubstring(str) {
+    let map = new Map();
+    let max = 0;
+    for (let i = 0; i < str.length; i++) map.set(i, str[i]);
+    map.forEach((value1, key1) => {
+        map.forEach((value2, key2) => {
+            if (key1 <= key2) {
+                let subStr = str.slice(key1, key2 + 1);
+                let set = new Set(subStr);
+                if (set.size === subStr.length && set.size > max) max = set.size;
+            }
+        })
+    });
+    console.log(max);
 }
 
 /*
@@ -116,6 +187,35 @@ function lengthOfLongestSubstring(str) {
     并在三者分别添加sayHi、saySad、sayHappy函数分别打印"Hi,i am a developing country."、"I am a sad poor country."、"I am a Happy developed country."
     ②请调用他们并打印相关语句即可。
 */
+
 function Country() {
-    this.name = "国家";
+    this.name = "Country";
 }
+
+function DevelopingCountry() {
+    Country.call(this);
+    this.sayHi = function () {
+        document.write("Hi, I am a developing country.<br>");
+    }
+}
+
+var developingCountry = new DevelopingCountry();
+developingCountry.sayHi();
+
+function PoorCountry() {
+}
+
+PoorCountry.prototype = new Country();
+PoorCountry.prototype.saySad = function () {
+    document.write("I am a sad poor country.<br>");
+};
+var poorCountry = new PoorCountry();
+poorCountry.saySad();
+
+var developedCountry = Object.create(new Country());
+developedCountry.sayHappy = function () {
+    document.write("I am a happy developed country.");
+};
+developedCountry.sayHappy();
+
+
