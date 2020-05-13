@@ -23,7 +23,7 @@ for (let n = 0; n < works.length; n++) {
     lifetime.innerText = "Lifetime" + works[n].lifetime;
     button.innerText = "Visit";
     author.style.display = "inline";
-    author.style.marginRight = "20px";
+    author.style.marginRight = "1em";
     lifetime.style.display = "inline";
     box_one.className = "inner-box";
     box_two.className = "inner-box";
@@ -32,9 +32,7 @@ for (let n = 0; n < works.length; n++) {
     for (let m = 0; m < works[n].photos.length; m++) {
         let img = document.createElement("img");
         img.src = works[n].photos[m];
-        img.width = 100;
-        img.height = 100;
-        img.style.margin = "5px";
+        img.className = "photo";
         box_two.append(img);
     }
     item.append(tips, box_one, box_two, button);
