@@ -1,12 +1,18 @@
-
 /*请在该区域内声明或者获取所要使用的全局变量*/
 /********************************************begin************************************/
 
 /*Global Variable Area */
+var container = document.getElementsByClassName("container")[0];
+var wrap = document.getElementsByClassName("wrap")[0];
+var buttons = document.getElementsByClassName("buttons")[0];
+var arrowLeft = document.getElementsByClassName("arrow_left")[0];
+var arrowRight = document.getElementsByClassName("arrow_right")[0];
+var timing = window.setInterval("pictureForward();", 2000);
+var trGroup = document.getElementsByTagName("tr");
+var imageNumber = 1;
+var ifEdit = false;
 
 /*********************************************end*************************************/
-
-
 
 /* 任务一
  * 请参考css中的style参数、html中的内容、下方的效果要求，然后在下面区域内编写代码。
@@ -20,13 +26,26 @@
  * ④切换图片的过程不要求，可直接切换，也可动画切换，但要求保证一定的切换动画合理性，不能出去明显的衔接不当。
  * ⑤本部分只能使用原生JS。
  */
+
 /********************************************begin************************************/
 
 /*Code Here*/
+arrowLeft.onclick = pictureBackward;
+arrowRight.onclick = pictureForward;
+function pictureBackward() {
+    buttons.childNodes.item(2 * imageNumber-- - 1).classList.toggle("on");
+    if (imageNumber === 0) imageNumber = 5;
+    buttons.childNodes.item(2 * imageNumber - 1).classList.toggle("on");
+    wrap.style.left = (-600 * imageNumber) + "px";
+}
+function pictureForward() {
+    buttons.childNodes.item(2 * imageNumber++ - 1).classList.toggle("on");
+    if (imageNumber === 6) imageNumber = 1;
+    buttons.childNodes.item(2 * imageNumber - 1).classList.toggle("on");
+    wrap.style.left = (-600 * imageNumber) + "px";
+}
 
 /*********************************************end*************************************/
-
-
 
 /* 任务二
  * 请参考css中的style参数、html中的内容、下方的效果要求，然后在下面区域内编写代码。
@@ -37,13 +56,20 @@
  * ④页面刚加载完成时，如果鼠标不在轮播区域内，自动开始自动播放；否则，等待直到鼠标移出轮播区域，再进行自动播放。
  * ⑤本部分只能使用原生JS。
  */
+
 /********************************************begin************************************/
 
 /*Code Here*/
+window.onload = function () {
+    document.onmousemove = function (e) {
+        if (container.contains(e.target)) container.onmouseenter();
+        document.onmousemove = null;
+    }
+};
+container.onmouseenter = function () {window.clearInterval(timing);};
+container.onmouseleave = function () {timing = window.setInterval("pictureForward();", 2000);};
 
 /*********************************************end*************************************/
-
-
 
 /* 任务三
  * 请参考css中的style参数、html中的内容、下方的效果要求，然后在下面区域内编写代码。
@@ -52,12 +78,18 @@
  * ②进行①操作过后，是否自动播放，其规则与上一个任务一致。
  * ③本部分只能使用原生JS。
  */
+
 /********************************************begin************************************/
 
 /*Code Here*/
+for (let n = 1; n <= 5; n++) buttons.childNodes.item(2 * n - 1).onclick = function () {shiftPicture(n);};
+function shiftPicture(newImageNumber) {
+    buttons.childNodes.item(2 * imageNumber - 1).classList.toggle("on");
+    buttons.childNodes.item(2 * (imageNumber = newImageNumber) - 1).classList.toggle("on");
+    wrap.style.left = (-600 * newImageNumber) + "px";
+}
 
 /*********************************************end*************************************/
-
 
 /*任务四
  * 请参考css中的style参数、html中的内容、下方的效果要求，然后在下面区域内编写代码。
@@ -66,8 +98,29 @@
  * ②点击单元格后，光标自动定位于单元格的首个字符或者汉字前。
  * ③本部分可以使用jQuery，也可以使用原生JS。
  */
+
 /********************************************begin************************************/
 
 /*Code Here*/
+for (let i = 1; i <= 4; i++) {
+    for (let j = 1; j <= 3; j++) trGroup.item(i).childNodes.item(2 * j - 1).onclick = function () {
+        if (!ifEdit) {
+            ifEdit = true;
+            let td = trGroup.item(i).childNodes.item(2 * j - 1);
+            td.innerHTML = "<input type='text' value='" + td.firstChild.nodeValue + "'>";
+            let textArea = document.getElementsByTagName("input")[0];
+            textArea.focus();
+            document.getElementsByTagName("input").item(0).focus();
+            document.onmousedown = function (e) {
+                if (e.target !== textArea) {
+                    let text = document.createTextNode(textArea.value);
+                    td.replaceChild(text, td.firstChild);
+                    document.onmousedown = null;
+                    ifEdit = false;
+                }
+            }
+        }
+    };
+}
 
 /*********************************************end*************************************/
