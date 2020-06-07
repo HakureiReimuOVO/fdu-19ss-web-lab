@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-require_once('config.php'); 
+require_once('config.php');
 
 /*
  Displays the list of artist links on the left-side of page
@@ -28,22 +28,26 @@ function outputArtists() {
  Displays the list of paintings for the artist id specified in the id query string
 */
 function outputPaintings() {
-   try {
-      if (isset($_GET['id']) && $_GET['id'] > 0) {   
-         $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
-         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         
-         $sql = 'select * from Paintings where ArtistId=' . $_GET['id'];
-         $result = $pdo->query($sql);
-         while ($row = $result->fetch()) {
-            outputSinglePainting($row);         
-         }
-         $pdo = null;
-      }
-   }
-   catch (PDOException $e) {
-      die( $e->getMessage() );
-   }
+    try {
+        if(isset($_GET['id']) && $_GET['id'] > 0) {
+            $pdo = new PDO(DBCONNSTRING,DBUSER,DBPASS);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $sql = 'select * from Paintings where ArtistId=:id';
+            $id = $_GET['id'];
+
+            $statement = $pdo->prepare($sql);
+            $statement->bindValue(':id', $id);
+            $statement->execute();
+
+            while ($row = $statement->fetch()) {
+                outputSinglePainting($row);
+            }
+            $pdo = null;
+        }
+    }catch(PDOException $e) {
+        die( $e->getMessage() );
+    }
 }
 
 /*
@@ -56,7 +60,7 @@ function outputSinglePainting($row) {
    echo '</div>';
    echo '<div class="content">';
    echo '<h4 class="header">';
-   echo $row['Title']; 
+   echo $row['Title'];
    echo '</h4>';
    echo '<p class="description">';
    echo $row['Excerpt'];
@@ -66,13 +70,14 @@ function outputSinglePainting($row) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Chapter 14</title>
-   <link href="semantic/semantic.css" rel="stylesheet"> 
+   <link href="semantic/semantic.css" rel="stylesheet">
 </head>
 <body>
    <main class="ui container">
@@ -88,7 +93,7 @@ function outputSinglePainting($row) {
            </div>
            <div class="twelve wide column">
               <div class="ui items">
-                 <?php outputPaintings(); ?> 
+                 <?php outputPaintings(); ?>
               </div>
            </div>
          </div>
