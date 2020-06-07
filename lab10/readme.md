@@ -1,23 +1,24 @@
-#Lab10实验文档
-> 19302010009 钱麒丹
+# Lab10实验文档
+> 19302010009 钱麒丹  
+> GitHub地址:https://github.com/HakureiReimuOVO/fdu-19ss-web-lab/blob/master/lab10/
 ## Exercise7
 ### 屏幕截图
 ![Exercise7-1](./img/Exercise7-1.png)
-![Exercise7-2](./img/Exercise7-2.png)
+![Exercise7-2](./img/Exercise7-2.png)  
 首先在config.php中设置完毕连接字符串、用户名和密码。
-###PDO
+### PDO
 1. 通过config.php中的常量数据连接到相对应的数据库，并设定处理错误的模式。
 2. 执行SQL语句对数据库进行查找，并得到结果的集合。
 3. 使用fetch()方法遍历结果集合中的记录并输出相应结果至html文档中。
 4. 将连接对象设置为null以释放内存并且关闭连接。
-###mysqli
+### mysqli
 1. 通过config.php中的常量数据连接到相对应的数据库，并检查连接是否成功，如果不成功则打印错误信息并退出当前脚本。
 2. 执行SQL语句对数据库进行查找，并得到结果的集合。
 3. 通过mysqli_fetch_assoc()函数遍历结果集合中的记录并输出相应结果至html文档中。
 4. 通过mysqli_free_result()函数释放内存;
 ## Exercise8
 ### 屏幕截图
-![Exercise8](./img/Exercise8.png)
+![Exercise8](./img/Exercise8.png)  
 通过config.php中的常量数据连接到相对应的数据库。
 ### outputArtists()
 通过PDO对artists表进行检索，并得到通过LastName排序的30个artists的数据记录集合，然后遍历集合并通过记录的ArtistID设置对应超链接的内容以及目标，同时根据当前图片对应的ArtistID设定超连接是否active，并将其写入html文档，最后释放内存并关闭连接。
