@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <html lang="en">
 <head>
     <!-- Latest compiled and minified Bootstrap Core CSS -->
@@ -50,15 +53,15 @@ function getLoginForm()
             if ($_SERVER["REQUEST_METHOD"] == "POST")
                 if (validLogin()) {
                     $expiryTime = time() + 60 * 60 * 24;
-                    setcookie("username", $_POST['username'], $expiryTime);
+                    $_SESSION['username']=$_POST['username'];
                 } else echo "login unsuccessful";
-            if (isset($_COOKIE['username'])) echo "Welcome " . $_COOKIE['username'];
+            if (isset($_SESSION['username'])) echo "Welcome " . $_SESSION['username'];
             else echo "No Post detected";
             ?>
         </h1>
     </div>
     <?php
-    if (!isset($_COOKIE['username'])) echo getLoginForm();
+    if (!isset($_SESSION['username'])) echo getLoginForm();
     else echo "This is some content";
     ?>
 </div>
