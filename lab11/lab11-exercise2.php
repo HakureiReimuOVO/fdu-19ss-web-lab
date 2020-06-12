@@ -52,7 +52,6 @@ function getLoginForm()
             require_once("config.php");
             if ($_SERVER["REQUEST_METHOD"] == "POST")
                 if (validLogin()) {
-                    $expiryTime = time() + 60 * 60 * 24;
                     $_SESSION['username']=$_POST['username'];
                 } else echo "login unsuccessful";
             if (isset($_SESSION['username'])) echo "Welcome " . $_SESSION['username'];
