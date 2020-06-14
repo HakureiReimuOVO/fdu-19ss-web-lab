@@ -47,13 +47,17 @@ function getLoginForm()
         <h1>
             <?php
             require_once("config.php");
+            $ifUnsuccessful = false;
             if ($_SERVER["REQUEST_METHOD"] == "POST")
                 if (validLogin()) {
                     $expiryTime = time() + 60 * 60 * 24;
                     setcookie("username", $_POST['username'], $expiryTime);
-                } else echo "login unsuccessful";
+                } else {
+                    echo "login unsuccessful";
+                    $ifUnsuccessful = true;
+                }
             if (isset($_COOKIE['username'])) echo "Welcome " . $_COOKIE['username'];
-            else echo "No Post detected";
+            else if (!$ifUnsuccessful)echo "No Post detected";
             ?>
         </h1>
     </div>

@@ -50,12 +50,16 @@ function getLoginForm()
         <h1>
             <?php
             require_once("config.php");
+            $ifUnsuccessful = false;
             if ($_SERVER["REQUEST_METHOD"] == "POST")
                 if (validLogin()) {
-                    $_SESSION['username']=$_POST['username'];
-                } else echo "login unsuccessful";
+                    $_SESSION['username'] = $_POST['username'];
+                } else {
+                    echo "login unsuccessful";
+                    $ifUnsuccessful = true;
+                }
             if (isset($_SESSION['username'])) echo "Welcome " . $_SESSION['username'];
-            else echo "No Post detected";
+            else if (!$ifUnsuccessful) echo "No Post detected";
             ?>
         </h1>
     </div>
